@@ -11,8 +11,9 @@ export class AIProctorService {
     try {
       // Initialize the face detector
       const model = faceLandmarksDetection.SupportedModels.MediaPipeFaceMesh;
-      const detectorConfig = {
+      const detectorConfig: faceLandmarksDetection.MediaPipeFaceMeshTfjsModelConfig = {
         runtime: 'tfjs' as const,
+        refineLandmarks: true,
       };
       
       this.detector = await faceLandmarksDetection.createDetector(model, detectorConfig);
