@@ -8,6 +8,8 @@ import json
 import hashlib
 import datetime
 import uuid
+import os
+import secrets
 from typing import Dict, List, Optional, Tuple
 from dataclasses import dataclass, asdict
 from enum import Enum
@@ -35,6 +37,7 @@ class Student:
     name: str
     email: str
     password_hash: str
+    salt: str
     status: StudentStatus = StudentStatus.ACTIVE
     created_at: str = None
     
@@ -92,9 +95,30 @@ class AIExamEntrySystem:
         self.exam_entries: Dict[str, ExamEntry] = {}
         self.load_data()
     
-    def _hash_password(self, password: str) -> str:
-        """Hash a password using SHA-256"""
-        return hashlib.sha256(password.encode()).hexdigest()
+    def _hash_password(self, password: str, salt: str = None) -> Tuple[str, str]:
+        """
+        Hash a password using PBKDF2-HMAC with SHA-256
+        
+        Args:
+            password: Plain text password
+            salt: Optional salt (generated if not provided)
+        
+        Returns:
+            Tuple of (password_hash, salt)
+        """
+        if salt is None:
+            # Generate a cryptographically secure random salt
+            salt = secrets.token_hex(32)
+        
+        # Use PBKDF2-HMAC with 100,000 iterations for password hashing
+        password_hash = hashlib.pbkdf2_hmac(
+            'sha256',
+            password.encode('utf-8'),
+            salt.encode('utf-8'),
+            100000
+        ).hex()
+        
+        return password_hash, salt
     
     def register_student(self, name: str, email: str, password: str) -> Tuple[bool, str]:
         """
@@ -115,13 +139,14 @@ class AIExamEntrySystem:
         
         # Create new student
         student_id = str(uuid.uuid4())
-        password_hash = self._hash_password(password)
+        password_hash, salt = self._hash_password(password)
         
         student = Student(
             student_id=student_id,
             name=name,
             email=email,
-            password_hash=password_hash
+            password_hash=password_hash,
+            salt=salt
         )
         
         self.students[student_id] = student
@@ -140,14 +165,16 @@ class AIExamEntrySystem:
         Returns:
             Tuple of (success: bool, student_id: Optional[str])
         """
-        password_hash = self._hash_password(password)
-        
         for student_id, student in self.students.items():
-            if student.email == email and student.password_hash == password_hash:
-                if student.status == StudentStatus.ACTIVE:
-                    return True, student_id
-                else:
-                    return False, None
+            if student.email == email:
+                # Hash the provided password with the stored salt
+                password_hash, _ = self._hash_password(password, student.salt)
+                
+                if student.password_hash == password_hash:
+                    if student.status == StudentStatus.ACTIVE:
+                        return True, student_id
+                    else:
+                        return False, None
         
         return False, None
     
@@ -287,6 +314,8 @@ class AIExamEntrySystem:
         
         # Validate score
         exam = self.exams[exam_id]
+        if score < 0:
+            return False, "Score cannot be negative"
         if score > exam.max_score:
             return False, f"Score cannot exceed maximum score of {exam.max_score}"
         
