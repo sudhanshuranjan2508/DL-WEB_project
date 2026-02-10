@@ -1,20 +1,10 @@
 .App {
   text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
 
 .App-header {
-  background-color: #282c34;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -22,17 +12,216 @@
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
+  padding: 20px;
 }
 
-.App-link {
-  color: #61dafb;
+h1 {
+  font-size: 3rem;
+  margin-bottom: 10px;
+  animation: fadeIn 1s ease-in;
 }
 
-@keyframes App-logo-spin {
+.subtitle {
+  font-size: 1.2rem;
+  color: rgba(255, 255, 255, 0.9);
+  margin-bottom: 40px;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  width: 100%;
+  max-width: 1000px;
+  margin: 40px 0;
+}
+
+.feature-card {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: 15px;
+  padding: 30px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.feature-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.feature-card h3 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+
+.feature-card p {
+  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.tech-stack {
+  margin: 40px 0;
+  width: 100%;
+  max-width: 800px;
+}
+
+.tech-stack h2 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+}
+
+.tech-badges {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px;
+}
+
+.badge {
+  background: rgba(255, 255, 255, 0.2);
+  padding: 10px 20px;
+  border-radius: 25px;
+  font-size: 1rem;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.badge:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.05);
+}
+
+.getting-started {
+  margin: 40px 0;
+  width: 100%;
+  max-width: 800px;
+}
+
+.getting-started h3 {
+  font-size: 1.8rem;
+  margin-bottom: 20px;
+}
+
+.commands {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.command-box {
+  background: rgba(0, 0, 0, 0.3);
+  padding: 20px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.command-box h4 {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+  color: #ffd700;
+}
+
+.command-box code {
+  background: rgba(0, 0, 0, 0.5);
+  padding: 15px;
+  border-radius: 5px;
+  display: block;
+  font-family: 'Courier New', monospace;
+  font-size: 0.9rem;
+  text-align: left;
+  word-wrap: break-word;
+}
+
+.status-indicator {
+  margin: 40px 0;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.status-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 10px 0;
+  font-size: 1rem;
+}
+
+.status-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #00ff00;
+  margin-right: 10px;
+  animation: pulse 2s infinite;
+}
+
+.App-footer {
+  margin-top: 40px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.App-footer p {
+  font-size: 1rem;
+  margin-bottom: 15px;
+}
+
+.github-link {
+  color: #ffffff;
+  text-decoration: none;
+  padding: 12px 30px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 25px;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  display: inline-block;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.github-link:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.05);
+}
+
+@keyframes fadeIn {
   from {
-    transform: rotate(0deg);
+    opacity: 0;
+    transform: translateY(-20px);
   }
   to {
-    transform: rotate(360deg);
+    opacity: 1;
+    transform: translateY(0);
   }
 }
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@media (max-width: 768px) {
+  h1 {
+    font-size: 2rem;
+  }
+  
+  .subtitle {
+    font-size: 1rem;
+  }
+  
+  .features-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .commands {
+    grid-template-columns: 1fr;
+  }
+}
+
