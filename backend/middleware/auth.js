@@ -1,5 +1,11 @@
 const jwt = require('jsonwebtoken');
 
+// Validate JWT secret exists
+if (!process.env.JWT_SECRET) {
+  console.error('FATAL ERROR: JWT_SECRET is not defined in environment variables');
+  process.exit(1);
+}
+
 module.exports = function(req, res, next) {
   // Get token from header
   const token = req.header('Authorization')?.replace('Bearer ', '');
@@ -14,7 +20,7 @@ module.exports = function(req, res, next) {
 
   try {
     // Verify token
-    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'fallback_secret');
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
     req.student = decoded;
     next();
   } catch (error) {

@@ -40,7 +40,7 @@ exports.register = async (req, res) => {
     // Generate JWT token
     const token = jwt.sign(
       { id: student._id, email: student.email },
-      process.env.JWT_SECRET || 'fallback_secret',
+      process.env.JWT_SECRET,
       { expiresIn: '24h' }
     );
 
@@ -106,7 +106,7 @@ exports.login = async (req, res) => {
     // Generate JWT token
     const token = jwt.sign(
       { id: student._id, email: student.email },
-      process.env.JWT_SECRET || 'fallback_secret',
+      process.env.JWT_SECRET,
       { expiresIn: '24h' }
     );
 
